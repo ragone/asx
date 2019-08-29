@@ -14,9 +14,18 @@ searching/getting posts from a single site.
 Run ~M-x asx~ and enter query when prompted.
 
 * Configuration
-| Variable                | Notes                                                               | Default                      |
-|-------------------------+---------------------------------------------------------------------+------------------------------|
-| ~asx-sites~             | Sites to search.                                                    | ~'("stackoverflow.com" ...)~ |
-| ~asx-number-of-answers~ | Answers to include.                                                 | ~3~                          |
-| ~asx-prompt-post-p~     | If non-nil, prompt for post to show. Otherwise show the first post. | ~nil~                        |
-| ~asx-buffer-name~       | Name of buffer to insert post.                                      | ~*AskStackExchange*~         |
+| Variable                | Notes                                                               | Default                     |
+|-------------------------+---------------------------------------------------------------------+-----------------------------|
+| ~asx-sites~             | Sites to search.                                                    | ~("stackoverflow.com" ...)~ |
+| ~asx-number-of-answers~ | Answers to include.                                                 | ~3~                         |
+| ~asx-prompt-post-p~     | If non-nil, prompt for post to show. Otherwise show the first post. | ~nil~                       |
+| ~asx-buffer-name~       | Name of buffer to insert post.                                      | ~*AskStackExchange*~        |
+
+* Commands
+| Variable                    | Notes                                                               |
+|-----------------------------+---------------------------------------------------------------------|
+| ~asx~                       | Search for query.                                                   |
+| ~asx-next-post~             | Go to next post.                                                    |
+| ~asx-previous-post~         | Go to previous post.                                                |
+| ~asx-reload-post~           | Reload current post.                                                |
+| ~asx-go-back-to-first-post~ | Go to first post.                                                   |
