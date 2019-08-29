@@ -1,0 +1,22 @@
+[[file:example.gif]]
+
+This package allows you to search any StackExchange site specified in
+`asx-sites` and insert the top post in an Org-mode buffer. For better searching,
+this uses Google as it is superior to StackExchange's searching capabilities.
+
+Inspired by [[https://www.reddit.com/r/emacs/comments/cs6cb4/instant_stackoverflow_solutions_in_emacs_without/][this reddit post]] and [[https://github.com/thanhvg/emacs-howdoyou][howdoyou.el]], I decided to build a more robust
+experience and make it compatible with Org-mode.
+
+I chose to scrape the StackExchange posts, as StackExchange's API only allows
+searching/getting posts from a single site.
+
+* Usage
+Run ~M-x asx~ and enter query when prompted.
+
+* Configuration
+| Variable                | Notes                                                               | Default                      |
+|-------------------------+---------------------------------------------------------------------+------------------------------|
+| ~asx-sites~             | Sites to search.                                                    | ~'("stackoverflow.com" ...)~ |
+| ~asx-number-of-answers~ | Answers to include.                                                 | ~3~                          |
+| ~asx-prompt-post-p~     | If non-nil, prompt for post to show. Otherwise show the first post. | ~nil~                        |
+| ~asx-buffer-name~       | Name of buffer to insert post.                                      | ~*AskStackExchange*~         |
