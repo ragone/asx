@@ -71,6 +71,21 @@ Otherwise show the first post."
   :type 'list
   :group 'asx)
 
+(defcustom asx-search-engine 'google
+  "Search engine to use."
+  :type 'symbol
+  :group 'asx)
+
+(defcustom asx-search-engine-alist '((google
+                                      :format "https://www.google.com/search?q=%s"
+                                      :extract-fn #'asx--extract-links-google)
+                                     (duckduckgo
+                                      :format "https://www.duckduckgo.com/?q=%s"
+                                      :extract-fn #'asx--extract-links-duckduckgo))
+  "Alist of search engine configurations."
+  :type '(alist :key-type symbol :value-type plist)
+  :group 'asx)
+
 (defcustom asx-buffer-name "*AskStackExchange*"
   "Name of buffer to insert post."
   :type 'string
@@ -164,11 +179,24 @@ Otherwise show the first post."
 
 (defun asx--extract-links (dom)
   "Extract links from DOM."
+  (funcall (cadr (plist-get (asx--get-search-engine) :extract-fn))
+           dom))
+
+(defun asx--extract-links-google (dom)
+  "Extract links from Google DOM."
   (mapcar (lambda (node)
             (cons
              (dom-text (car (dom-by-class node "^ellip$")))
              (dom-attr (dom-child-by-tag node 'a) 'href)))
           (dom-by-class dom "^r$")))
+
+(defun asx--extract-links-duckduckgo (dom)
+  "Extract links from DuckDuckGo DOM."
+  (mapcar (lambda (node)
+            (cons
+             (dom-texts (car (dom-by-class node "result__a")))
+             (string-trim (dom-text (car (dom-by-class node "result__url"))))))
+          (dom-by-class dom "result ")))
 
 (defun asx--filter-posts (links)
   "Filter LINKS for questions."
@@ -187,13 +215,12 @@ Otherwise show the first post."
 
 (defun asx--query-construct (query)
   "Return URI for QUERY."
-  (concat (asx--query-base-url)
-          (url-hexify-string (asx--query-string query))))
+  (concat (format (plist-get (asx--get-search-engine) :format)
+                  (url-hexify-string (asx--query-string query)))))
 
-(defun asx--query-base-url ()
-  "Return the base URL to query."
-  ;; TODO: Make this work with DuckDuckGo
-  "https://www.google.com/search?q=")
+(defun asx--get-search-engine ()
+  "Return the search engine from `asx-search-engine-list'."
+  (alist-get asx-search-engine asx-search-engine-alist))
 
 (defun asx--query-string (query)
   "Return the query string for QUERY."
