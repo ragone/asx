@@ -29,3 +29,10 @@ Run ~M-x asx~ and enter query when prompted.
 | ~asx-previous-post~         | Go to previous post.                                                |
 | ~asx-reload-post~           | Reload current post.                                                |
 | ~asx-go-back-to-first-post~ | Go to first post.                                                   |
+
+* Similar projects
+- [[https://github.com/vermiculus/sx.el][SX]]
+- [[https://github.com/rudolfolah/emacs-sos][Emacs SOS]]
+- [[https://github.com/thanhvg/emacs-howdoyou/blob/master/howdoyou.el][howdoyou]]
+- [[https://github.com/santinic/how2][how2]]
+- [[https://github.com/atykhonov/emacs-howdoi][howdoi]]
