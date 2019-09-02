@@ -119,25 +119,21 @@ Otherwise show the first post."
   (asx--request (asx--query-construct query)
                 #'asx--handle-search))
 
-;;;###autoload
 (defun asx-next-post ()
   "Go to next post."
   (interactive)
   (asx-n-post 1))
 
-;;;###autoload
 (defun asx-previous-post ()
   "Go to previous post."
   (interactive)
   (asx-n-post -1))
 
-;;;###autoload
 (defun asx-reload-post ()
   "Reload current post."
   (interactive)
   (asx-n-post 0))
 
-;;;###autoload
 (defun asx-go-back-to-first-post ()
   "Go to first post."
   (interactive)
