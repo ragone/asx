@@ -201,7 +201,6 @@ Otherwise show the first post."
                 (string-match "questions/[0-9]+" (cdr link)))
               links))
 
-
 (defun asx--get-current-post ()
   "Return current post."
   (nth asx--current-post-index asx--posts))
