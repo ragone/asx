@@ -134,7 +134,7 @@ Otherwise show the first post."
   (interactive)
   (asx-n-post 0))
 
-(defun asx-go-back-to-first-post ()
+(defun asx-first-post ()
   "Go to first post."
   (interactive)
   (asx-n-post (- asx--current-post-index)))
