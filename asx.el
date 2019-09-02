@@ -4,7 +4,7 @@
 ;; Created: 24 August 2019
 ;; Homepage: https://github.com/ragone/asx
 ;; Keywords: convenience
-;; Package-Version: 0.1.0
+;; Version: 0.1.0
 ;; Package-Requires: ((request "0.3.0") (org "9.2.5") (seq "2") (emacs "25"))
 
 ;; This file is not part of GNU Emacs.
