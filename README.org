@@ -11,6 +11,10 @@ experience and make it compatible with Org-mode.
 I chose to scrape the StackExchange posts, as StackExchange's API only allows
 searching/getting posts from a single site.
 
+* Install
+
+Available on [[https://melpa.org/#/asx][MELPA]].
+
 * Usage
 Run ~M-x asx~ and enter query when prompted.
 
