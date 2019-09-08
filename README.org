@@ -29,13 +29,14 @@ Run ~M-x asx~ and enter query when prompted.
 | ~asx-buffer-name~         | Name of buffer to insert post.                                      | ~*AskStackExchange*~            |
 
 * Commands
-| Variable                    | Notes                                                               |
-|-----------------------------+---------------------------------------------------------------------|
-| ~asx~                       | Search for query.                                                   |
-| ~asx-next-post~             | Go to next post.                                                    |
-| ~asx-previous-post~         | Go to previous post.                                                |
-| ~asx-reload-post~           | Reload current post.                                                |
-| ~asx-go-back-to-first-post~ | Go to first post.                                                   |
+| Variable                    | Notes                |
+|-----------------------------+----------------------|
+| ~asx~                       | Search for query.    |
+| ~asx-jump~                  | Jump to post.        |
+| ~asx-next-post~             | Go to next post.     |
+| ~asx-previous-post~         | Go to previous post. |
+| ~asx-reload-post~           | Reload current post. |
+| ~asx-go-back-to-first-post~ | Go to first post.    |
 
 * Similar projects
 - [[https://github.com/vermiculus/sx.el][SX]]

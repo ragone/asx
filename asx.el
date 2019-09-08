@@ -119,6 +119,12 @@ Otherwise show the first post."
   (asx--request (asx--query-construct query)
                 #'asx--handle-search))
 
+(defun asx-jump ()
+  "Jump to post."
+  (interactive)
+  (asx--select-post asx--posts)
+  (asx--request-post (asx--get-current-post)))
+
 (defun asx-next-post ()
   "Go to next post."
   (interactive)
@@ -168,14 +174,19 @@ Otherwise show the first post."
   "Handle search for DOM."
   (setq asx--posts (asx--filter-posts
                     (asx--extract-links dom)))
-  (setq asx--current-post-index
-        (or (and asx-prompt-post-p
-                 (cl-position (completing-read "Post: " asx--posts)
-                              asx--posts
-                              :test #'equal
-                              :key #'car))
-            0))
+  (if asx-prompt-post-p
+      (asx--select-post asx--posts)
+    (setq asx--current-post-index 0))
   (asx--request-post (asx--get-current-post)))
+
+(defun asx--select-post (posts)
+  "Prompt user to select from POSTS."
+  (setq asx--current-post-index
+        (cl-position (completing-read "Post: " posts)
+                     asx--posts
+                     :test #'equal
+                     :key #'car)))
+
 
 (defun asx--extract-links (dom)
   "Extract links from DOM."
