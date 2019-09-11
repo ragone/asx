@@ -100,6 +100,9 @@ Otherwise show the first post."
 (defvar asx--posts nil
   "List of posts.")
 
+(defvar asx--query-history nil
+  "History of queries.")
+
 (defvar asx--user-agents
   '("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:11.0) Gecko/20100101 Firefox/11.0"
     "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100 101 Firefox/22.0"
@@ -117,7 +120,9 @@ Otherwise show the first post."
   "Search for QUERY."
   (interactive (list (read-string
                       "Query: "
-                      (asx--symbol-or-region))))
+                      (asx--symbol-or-region)
+                      'asx--query-history)))
+  (setq asx--query-history (append (list query) asx--query-history))
   (asx--request (asx--query-construct query)
                 #'asx--handle-search))
 
