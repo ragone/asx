@@ -115,7 +115,9 @@ Otherwise show the first post."
 ;;;###autoload
 (defun asx (query)
   "Search for QUERY."
-  (interactive "sQuery: ")
+  (interactive (list (read-string
+                      "Query: "
+                      (asx--symbol-or-region))))
   (asx--request (asx--query-construct query)
                 #'asx--handle-search))
 
@@ -186,6 +188,16 @@ Otherwise show the first post."
                      asx--posts
                      :test #'equal
                      :key #'car)))
+
+(defun asx--symbol-or-region ()
+  "Grab the symbol at point or selected region."
+  (cond ((use-region-p)
+         (buffer-substring-no-properties (region-beginning)
+                                         (region-end)))
+        ((require 'xref nil t)
+         ;; A little smarter than using `symbol-at-point', though in most cases,
+         ;; xref ends up using `symbol-at-point' anyway.
+         (xref-backend-identifier-at-point (xref-find-backend)))))
 
 (defun asx--extract-links (dom)
   "Extract links from DOM."
