@@ -122,6 +122,8 @@ Otherwise show the first post."
                       "Query: "
                       (asx--symbol-or-region)
                       'asx--query-history)))
+  (when (string-empty-p query)
+    (user-error "No query specified"))
   (setq asx--query-history (append (list query) asx--query-history))
   (asx--request (asx--query-construct query)
                 #'asx--handle-search))
@@ -154,20 +156,36 @@ Otherwise show the first post."
 
 ;;;;; Support
 
-(defun asx--request (url callback)
-  "Request URL with CALLBACK."
+(defun asx--request (url callback &optional error-callback)
+  "Request URL with CALLBACK.
+Optionally specify ERROR-CALLBACK."
   (let ((request-curl-options (list (format "-A %s" (asx--get-user-agent)))))
     (request url
              :parser (lambda () (libxml-parse-html-region (point-min) (point-max)))
              :error (cl-function (lambda (&rest args &key error-thrown &allow-other-keys)
-                                   (error "%s" error-thrown)))
+                                   (if error-callback
+                                       (funcall error-callback url)
+                                     (error "%s" error-thrown))))
              :success (cl-function (lambda (&key data &allow-other-keys)
                                      (funcall callback data))))))
 
 (defun asx--request-post (post)
   "Request POST."
   (message "Loading: %s" (car post))
-  (asx--request (cdr post) #'asx--insert-post-dom))
+  (asx--request (cdr post)
+                #'asx--insert-post-dom
+                #'asx--handle-error))
+
+(defun asx--handle-error (url)
+  "Handle request error for the URL.
+Delete the post from `asx--posts' and try to insert the next post instead."
+  (setq asx--posts (seq-remove
+                    (lambda (post)
+                      (string= (cdr post) url))
+                    asx--posts))
+  (unless asx--posts
+    (user-error "No posts found"))
+  (asx-n-post 1))
 
 (defun asx--get-user-agent ()
   "Return random user-agent from `asx--user-agents'."
@@ -181,6 +199,8 @@ Otherwise show the first post."
   "Handle search for DOM."
   (setq asx--posts (asx--filter-posts
                     (asx--extract-links dom)))
+  (unless asx--posts
+    (user-error "No posts found"))
   (if asx-prompt-post-p
       (asx--select-post asx--posts)
     (setq asx--current-post-index 0))
