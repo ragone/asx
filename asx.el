@@ -120,7 +120,7 @@ Otherwise show the first post."
   "Search for QUERY."
   (interactive (list (read-string
                       "Query: "
-                      (asx--symbol-or-region)
+                      (and current-prefix-arg (asx--symbol-or-region))
                       'asx--query-history)))
   (when (string-empty-p query)
     (user-error "No query specified"))
