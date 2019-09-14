@@ -1,4 +1,4 @@
-;;; asx.el --- Ask Stack Exchange -*- lexical-binding: t; -*-
+;;; asx.el --- Ask StackExchange/StackOverflow -*- lexical-binding: t; -*-
 
 ;; Author: Alex Ragone <ragonedk@gmail.com>
 ;; Created: 24 August 2019
@@ -117,7 +117,8 @@ Otherwise show the first post."
 
 ;;;###autoload
 (defun asx (query)
-  "Search for QUERY."
+  "Search for QUERY.
+If a prefix argument is provided, the initial input will be the symbol at point."
   (interactive (list (read-string
                       "Query: "
                       (and current-prefix-arg (asx--symbol-or-region))
