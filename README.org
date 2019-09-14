@@ -27,6 +27,7 @@ Run ~M-x asx~ and enter query when prompted.
 | ~asx-number-of-answers~   | Answers to include.                                                 | ~3~                             |
 | ~asx-prompt-post-p~       | If non-nil, prompt for post to show. Otherwise show the first post. | ~nil~                           |
 | ~asx-buffer-name~         | Name of buffer to insert post.                                      | ~*AskStackExchange*~            |
+| ~asx-skip-unanswered~     | If non-nil, skip posts which have no answers.                       | ~t~                             |
 
 * Commands
 | Variable                    | Notes                |

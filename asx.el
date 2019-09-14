@@ -87,6 +87,11 @@ Otherwise show the first post."
   :type '(alist :key-type symbol :value-type plist)
   :group 'asx)
 
+(defcustom asx-skip-unanswered t
+  "If non-nil, skip posts which have no answers."
+  :type 'boolean
+  :group 'asx)
+
 (defcustom asx-buffer-name "*AskStackExchange*"
   "Name of buffer to insert post."
   :type 'string
@@ -175,11 +180,11 @@ Optionally specify ERROR-CALLBACK."
   (message "Loading: %s" (car post))
   (asx--request (cdr post)
                 #'asx--insert-post-dom
-                #'asx--handle-error))
+                #'asx--remove-and-next))
 
-(defun asx--handle-error (url)
-  "Handle request error for the URL.
-Delete the post from `asx--posts' and try to insert the next post instead."
+(defun asx--remove-and-next (url)
+  "Delete the URL from `asx--posts'.
+Try to insert the next post instead."
   (setq asx--posts (seq-remove
                     (lambda (post)
                       (string= (cdr post) url))
@@ -258,7 +263,11 @@ Delete the post from `asx--posts' and try to insert the next post instead."
 
 (defun asx--insert-post-dom (dom)
   "Insert post DOM."
-  (asx--insert-post (asx--normalize-post dom)))
+  (let ((post (asx--normalize-post dom)))
+    (if (and asx-skip-unanswered
+             (not (plist-get post :answers)))
+        (asx--remove-and-next (plist-get post :url))
+      (asx--insert-post post))))
 
 (defun asx--query-construct (query)
   "Return URI for QUERY."
