@@ -5,7 +5,7 @@
 ;; Homepage: https://github.com/ragone/asx
 ;; Keywords: convenience
 ;; Version: 0.1.1
-;; Package-Requires: ((request "0.3.0") (org "9.2.5") (emacs "26"))
+;; Package-Requires: ((emacs "25"))
 
 ;; This file is not part of GNU Emacs.
 
