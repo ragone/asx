@@ -373,7 +373,7 @@ Try to insert the next post instead."
       (cond
        ((and (equal (car node) 'a)
              (not (dom-by-tag node 'img)))
-        (org-make-link-string (dom-attr node 'href) (dom-texts node)))
+        (org-link-make-string (dom-attr node 'href) (dom-texts node)))
        ((equal (car node) 'pre)
         (dom-node 'pre
                   '()
