@@ -239,7 +239,7 @@ Try to insert the next post instead."
   "Extract links from Google DOM."
   (mapcar (lambda (node)
             (cons
-             (dom-text (car (dom-by-class node "^ellip$")))
+             (dom-text (car (dom-by-tag node 'h3)))
              (dom-attr (dom-child-by-tag node 'a) 'href)))
           (dom-by-class dom "^r$")))
 
