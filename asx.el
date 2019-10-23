@@ -186,11 +186,24 @@ If a prefix argument is provided, the initial input will be the symbol at point.
 (defun asx--ivy-search ()
   "Query search engine with Ivy."
   (require 'json)
-  (ivy-read "Query: " #'counsel-search-function
+  (ivy-read "Query: " #'asx--ivy-search-function
             :dynamic-collection t
             :history 'asx--query-history
             :initial-input (asx--initial-input)
             :caller 'counsel-search))
+
+(defun asx--ivy-search-function (query)
+  "Create a request to a search engine with QUERY.
+Return 0 tells `ivy--exhibit' not to update the minibuffer.
+We update it in the callback with `ivy-update-candidates'."
+  (or
+   (ivy-more-chars)
+   (progn
+     (asx--request (asx--query-construct query)
+                   (lambda (dom)
+                     (ivy-update-candidates (mapcar #'car (asx--filter-posts
+                                                           (asx--extract-links dom))))))
+     0)))
 
 (defun asx--initial-input ()
   "Get initial input for query."
