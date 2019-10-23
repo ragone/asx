@@ -5,7 +5,7 @@
 ;; Homepage: https://github.com/ragone/asx
 ;; Keywords: convenience
 ;; Version: 0.1.1
-;; Package-Requires: ((emacs "25"))
+;; Package-Requires: ((emacs "26.1"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -124,10 +124,7 @@ Otherwise show the first post."
 (defun asx (query)
   "Search for QUERY.
 If a prefix argument is provided, the initial input will be the symbol at point."
-  (interactive (list (read-string
-                      "Query: "
-                      (and current-prefix-arg (asx--symbol-or-region))
-                      'asx--query-history)))
+  (interactive (list (asx--read-query)))
   (when (string-empty-p query)
     (user-error "No query specified"))
   (setq asx--query-history (append (list query) asx--query-history))
@@ -161,6 +158,43 @@ If a prefix argument is provided, the initial input will be the symbol at point.
   (asx-n-post (- asx--current-post-index)))
 
 ;;;;; Support
+
+(defun asx--read-query ()
+  "Read query from user."
+  (cond ((and (require 'ivy nil t) (fboundp 'counsel-google))
+         (asx--ivy-search))
+        ((and (require 'helm-net nil t) (fboundp 'helm-google-suggest))
+         (asx--helm-search))
+        (t
+         (read-string
+          "Query: "
+          (asx--initial-input)
+          'asx--query-history))))
+
+(defun asx--helm-search ()
+  "Query search engine with Helm."
+  (helm-other-buffer
+   (helm-build-sync-source "Query"
+     :candidates (lambda ()
+                   (funcall helm-google-suggest-default-function))
+     :history 'asx--query-history
+     :volatile t
+     :requires-pattern 3)
+   "*Helm Google*"))
+
+
+(defun asx--ivy-search ()
+  "Query search engine with Ivy."
+  (require 'json)
+  (ivy-read "Query: " #'counsel-search-function
+            :dynamic-collection t
+            :history 'asx--query-history
+            :initial-input (asx--initial-input)
+            :caller 'counsel-search))
+
+(defun asx--initial-input ()
+  "Get initial input for query."
+  (and current-prefix-arg (asx--symbol-or-region)))
 
 (defun asx--request (url callback &optional error-callback)
   "Request URL with CALLBACK.

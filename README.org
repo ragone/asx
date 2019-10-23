@@ -11,6 +11,9 @@ experience and make it compatible with Org-mode.
 I chose to scrape the StackExchange posts, as StackExchange's API only allows
 searching/getting posts from a single site.
 
+If Ivy 0.13.0 or Helm is installed, suggestions from Google or DuckDuckGo will
+be provided while you type.
+
 * Install
 
 Available on [[https://melpa.org/#/asx][MELPA]].
