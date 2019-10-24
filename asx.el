@@ -128,6 +128,7 @@ If a prefix argument is provided, the initial input will be the symbol at point.
   (when (string-empty-p query)
     (user-error "No query specified"))
   (setq asx--query-history (append (list query) asx--query-history))
+  (message "Loading: %s" query)
   (asx--request (asx--query-construct query)
                 #'asx--handle-search))
 
@@ -249,10 +250,24 @@ Try to insert the next post instead."
 (defun asx--select-post (posts)
   "Prompt user to select from POSTS."
   (setq asx--current-post-index
-        (cl-position (completing-read "Post: " posts)
-                     asx--posts
-                     :test #'equal
-                     :key #'car)))
+        (let ((posts-with-selection (asx--get-posts-with-prefix posts)))
+          (cl-position (completing-read "Post: " posts-with-selection)
+                       posts-with-selection
+                       :test #'equal
+                       :key #'car))))
+
+(defun asx--get-posts-with-prefix (posts)
+  "Return POSTS including the title prefix."
+  (mapcar (lambda (post)
+            (cons (concat (asx--get-prefix post) (car post))
+                  (cdr post)))
+          posts))
+
+(defun asx--get-prefix (post)
+  "Return the prefix for POST."
+  (cond ((equal (car post) (car (asx--get-current-post)))
+         "=> ")
+        (t "   ")))
 
 (defun asx--symbol-or-region ()
   "Grab the symbol at point or selected region."
