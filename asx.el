@@ -375,6 +375,7 @@ Try to insert the next post instead."
   (delete-trailing-whitespace)
   (org-mode)
   (visual-line-mode)
+  (read-only-mode)
   (goto-char (point-min)))
 
 (defun asx--insert-post (post)
